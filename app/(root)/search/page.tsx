@@ -17,9 +17,9 @@ const page = async () => {
         <LocalSearchBar />
       </div>
       <div className="mt-6 w-[70%] max-sm:w-full sm:w-full">
-        {result?.map((user) => (
-          <UserCard user={user} />
-        ))}
+        {result?.map((user) => {
+          return <UserCard user2={user} />;
+        })}
       </div>
     </div>
   );

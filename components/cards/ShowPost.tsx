@@ -86,7 +86,7 @@ const ShowPost = ({ post }: any) => {
         <p className="text-gray-400 text-[13px]">View all 100 comments</p>
       </div>
 
-      <div className="flex mb-3  mt-3 items-center justify-between items-center pr-2">
+      <div className="flex mb-3  mt-3 items-center justify-between pr-2">
         <div className="flex gap-2">
           <Image
             src={user.picture}
