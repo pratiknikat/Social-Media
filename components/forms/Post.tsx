@@ -14,9 +14,10 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 import AWS from "aws-sdk";
-import { addPost } from "@/lib/actions/post.action";
 import router from "next/router";
-
+import { ChangeEvent } from "react";
+import { addPost } from "@/lib/actions/post.action";
+import { usePathname, useRouter } from "next/navigation";
 interface Props {
   mongoUserId: string;
 }
@@ -25,44 +26,38 @@ const FormSchema = z.object({
   caption: z
     .string()
     .min(10, { message: "caption must be at least 10 characters." }),
-  image: z.string(),
+  image: z.custom<File>(),
 });
 
 const AddPost = ({ mongoUserId }: Props) => {
+  const router = useRouter();
+  const pathname = usePathname();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
 
   async function handleImageUpload(file: any) {
-    // Set up AWS S3 configuration
-    console.log(file);
     const s3 = new AWS.S3({
       accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID,
       secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY,
       region: process.env.NEXT_PUBLIC_AWS_REGION,
     });
-
-    // Set up S3 parameters
-    const fileName = file.name || "default"; // Use a default name if file.name is undefined
-
-    const fileExtension = file.type === "image/jpeg" ? "jpeg" : "png";
+    const fileName = file.name || "default";
     const params = {
       Bucket:
         process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME || "default-bucket-name",
-      Key: `uploads/${Date.now()}_${fileName}.${fileExtension}`,
+      Key: `uploads/${Date.now()}_${fileName}`,
       Body: file,
       ACL: "public-read",
+      ContentType: "image/jpg",
     };
 
     try {
-      // Upload the file to S3
       const uploadResult = await s3.upload(params).promise();
-
-      // Return the URL of the uploaded file
       return uploadResult.Location;
     } catch (error) {
       console.error("Error uploading image:", error);
-      throw error; // Rethrow the error to be caught in the onSubmit function
+      throw error;
     }
   }
 
@@ -71,17 +66,14 @@ const AddPost = ({ mongoUserId }: Props) => {
       const caption = form.getValues("caption");
       const imageFiles = form.getValues("image");
 
-      console.log(imageFiles); // Make sure the file object is correct
-
-      if (imageFiles && imageFiles.length > 0) {
-        const imageUrl = await handleImageUpload(imageFiles[0]); // Use imageFiles[0] instead of imageFiles
-        console.log(imageUrl);
+      if (imageFiles) {
+        const imageUrl = await handleImageUpload(imageFiles);
 
         await addPost({
           caption: caption,
           imageUrl: imageUrl,
           user: JSON.parse(mongoUserId),
-          path: "",
+          path: pathname,
         });
 
         router.push("/");
@@ -127,11 +119,21 @@ const AddPost = ({ mongoUserId }: Props) => {
         <FormField
           control={form.control}
           name="image"
-          render={({ field }) => (
+          render={({ field: { ref, name, onBlur, onChange } }) => (
             <FormItem>
               <FormLabel>Image</FormLabel>
               <FormControl>
-                <input type="file" accept="image/*" {...field} />
+                <input
+                  ref={ref}
+                  name={name}
+                  onBlur={onBlur}
+                  type="file"
+                  accept="image/*"
+                  // {...field}÷
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    onChange(e.target.files?.[0])
+                  }
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -8,11 +8,12 @@ interface IUser extends Document {
   password: string;
   bio?: string;
   picture: string;
-  story?: Schema.Types.ObjectId;
+  stories?: Schema.Types.ObjectId[]; // Array of references to stories
   posts?: Schema.Types.ObjectId[];
   saved?: Schema.Types.ObjectId[];
-  followers?: Schema.Types.ObjectId[]; // Array of references to followers
-  following?: Schema.Types.ObjectId[]; // Array of references to users being followed
+  followers?: Schema.Types.ObjectId[];
+  following?: Schema.Types.ObjectId[];
+  notification?: Schema.Types.ObjectId[];
   joinedAt: Date;
 }
 
@@ -29,14 +30,15 @@ const UserSchema = new Schema({
   password: { type: String, required: true },
   bio: { type: String },
   picture: { type: String, required: true },
-  story: { type: Schema.Types.ObjectId, ref: "Story" },
+  stories: [{ type: Schema.Types.ObjectId, ref: "Story" }], // Array of references to stories
   posts: [{ type: Schema.Types.ObjectId, ref: "Post" }],
   saved: [{ type: Schema.Types.ObjectId, ref: "Post" }],
-  followers: [{ type: Schema.Types.ObjectId, ref: "User" }], // Array of references to followers
-  following: [{ type: Schema.Types.ObjectId, ref: "User" }], // Array of references to users being followed
+  followers: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  following: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  notification: [{ type: Schema.Types.ObjectId, ref: "User" }],
   joinedAt: { type: Date, default: Date.now },
 });
 
-const User = models.User || model<IUser>("User", UserSchema);
+const User = models?.User || model<IUser>("User", UserSchema);
 
 export default User;

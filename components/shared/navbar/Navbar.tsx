@@ -1,10 +1,18 @@
-import { SignedIn, UserButton } from "@clerk/nextjs";
+import { SignedIn, UserButton, auth } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import MobileNav from "./MobileNav";
 
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
 const Navbar = () => {
+  const { userId } = auth();
+
   return (
     <nav className="flex-between bg-white fixed z-50 w-full gap-5 p-6 shadow-light-300 sm:px-12 dark:shadow-none">
       <Link href="/" className="flex items-center gap-1 max-sm:hidden ">
@@ -38,12 +46,19 @@ const Navbar = () => {
           </SignedIn>
         </div>
         <div className="lg:hidden">
-          <Image
-            src="assets/icons/love.svg"
-            alt="love"
-            width={30}
-            height={30}
-          />
+          <Popover>
+            <PopoverTrigger>
+              <Image
+                src="assets/icons/love.svg"
+                alt="love"
+                width={30}
+                height={30}
+              />
+            </PopoverTrigger>
+            <PopoverContent className="bg-white">
+              Place content for the popover here.
+            </PopoverContent>
+          </Popover>
         </div>
         <div className="lg:hidden">
           <Image
@@ -53,8 +68,6 @@ const Navbar = () => {
             height={30}
           />
         </div>
-
-        {/* <MobileNav /> */}
       </div>
     </nav>
   );

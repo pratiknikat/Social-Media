@@ -2,26 +2,16 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 
-const ShowPost = () => {
-  const initialCaption =
-    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Loctetur adipisicing elit. Loctetur adipisicing elit. Loctetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit.";
-
+const ShowPost = ({ post }: any) => {
+  const { caption, imageUrl, user } = post;
+  const initialCaption = caption;
   const [showFullCaption, setShowFullCaption] = useState(false);
   const maxLength = 8;
 
   const shortenedCaption = showFullCaption
     ? initialCaption
-    : `${initialCaption.split(" ").slice(0, maxLength).join(" ")}...`;
+    : `${caption.split(" ").slice(0, maxLength).join(" ")}...`;
 
   return (
     <div
@@ -31,19 +21,20 @@ const ShowPost = () => {
       <div className="flex mb-3 justify-between items-center pr-2">
         <div className="flex gap-2">
           <Image
-            src="/assets/images/batman.webp"
+            src={user.picture}
             alt="post"
             width={30}
             height={30}
             style={{ borderRadius: "50%" }}
           />
-          <p>pratik_n_987</p>
+          <p>{user.username}</p>
         </div>
         <Image src="/assets/icons/more.svg" alt="more" width={4} height={4} />
       </div>
+
       <div className="border-1 border-l-amber-900">
         <Image
-          src="/assets/images/batman.webp"
+          src={imageUrl}
           alt="post"
           width={300}
           height={300}
@@ -74,10 +65,10 @@ const ShowPost = () => {
         </div>
         <Image src="/assets/icons/save.svg" width={22} height={22} alt="save" />
       </div>
+
       <div className="flex gap-2 mt-2 text-[14px]">
         <p>
-          {/* Display shortened or full caption */}
-          <span className="font-bold">pratik_n_987 </span>
+          <span className="font-bold">{user.username} </span>
           {shortenedCaption}
           {!showFullCaption && (
             <span
@@ -90,6 +81,7 @@ const ShowPost = () => {
           )}
         </p>
       </div>
+
       <div className="flex gap-2 mt-2">
         <p className="text-gray-400 text-[13px]">View all 100 comments</p>
       </div>
@@ -97,7 +89,7 @@ const ShowPost = () => {
       <div className="flex mb-3  mt-3 items-center justify-between items-center pr-2">
         <div className="flex gap-2">
           <Image
-            src="/assets/images/batman.webp"
+            src={user.picture}
             alt="post"
             width={40}
             height={30}

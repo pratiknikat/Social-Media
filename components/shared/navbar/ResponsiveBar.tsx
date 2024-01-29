@@ -15,7 +15,7 @@ const ResponsiveBar = () => {
         borderTopRightRadius: "10px",
         height: "70px",
       }}
-      className="bg-white lg:hidden  absolute z-50 bottom-0 left-0 right-0 flex justify-between px-5 border-t-2 p-1"
+      className="bg-white lg:hidden z-50 bottom-0 left-0 right-0 flex justify-between px-5 border-t-2 p-1"
     >
       {mobileSidebarLinks.map((item) => {
         const isActive =

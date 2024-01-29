@@ -24,8 +24,6 @@ const PostSchema = new Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-console.log(models);
-
 const Post = models?.Post || model("Post", PostSchema);
 
 export default Post;

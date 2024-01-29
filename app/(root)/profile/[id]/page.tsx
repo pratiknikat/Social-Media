@@ -4,56 +4,61 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getUserById } from "@/lib/actions/user.action";
+import { redirect } from "next/navigation";
+import { URLProps } from "@/types";
 
-const Page = () => {
+import UserProfile from "@/components/profile/UserProfile";
+
+const Page = async ({ params }: URLProps) => {
   const { userId: clerkId } = auth();
+  if (!clerkId) {
+    redirect("/sign-in");
+  }
+  const mongoUser = await getUserById({ userId: params.id });
+  // console.log(mongoUser);
+  const { name, username, bio, picture, followers, following, posts, stories } =
+    mongoUser;
 
   return (
     <div className="p-4 sm:p-6 md:p-8 lg:p-10">
-      <p className="text-2xl font-bold mb-4">pratik_n_987</p>
+      <p className="text-2xl font-bold mb-4">{username}</p>
 
       <div className="flex items-center mr-16 max-sm:mr-0 sm:flex-row sm:items-center justify-between">
-        <div className="mb-4 sm:mb-0 sm:mr-4">
-          <Image
-            src="/assets/images/batman.webp"
-            alt="profile"
-            width={100}
-            height={100}
-            className="rounded-full"
-          />
-        </div>
+        <UserProfile
+          image={picture || "/images/default_avatar.png"}
+          story={stories}
+        />
         <div className="flex gap-4">
           <div className="text-center">
-            <div className="font-bold">0</div>
+            <div className="font-bold">{posts.length}</div>
             <div className="text-sm">posts</div>
           </div>
           <div className="text-center">
-            <div className="font-bold">428</div>
+            <div className="font-bold">{followers.length}</div>
             <div className="text-sm">followers</div>
           </div>
           <div className="text-center">
-            <div className="font-bold">450</div>
+            <div className="font-bold">{following.length}</div>
             <div className="text-sm">following</div>
           </div>
         </div>
       </div>
       {/* bio */}
       <div className="mt-4 text-sm">
-        <div className="font-bold">Pratik Nikat</div>
-        <div>👨‍💻 Software Developer</div>
-        <div>📍 Pune, India</div>
-        <div>📧 pratikn987@gmail.com</div>
+        <div className="font-bold">{name}</div>
+        <div>👨‍💻 {bio}</div>
+        {/* <div>📍 Pune, India</div> */}
+        {/* <div>📧 pratikn987@gmail.com</div> */}
       </div>
       <div className="flex mt-6 gap-4 max-sm:justify-center nax-sm:items-center">
         <SignedIn>
-          {clerkId && (
+          {clerkId == mongoUser.clerkId && (
             <>
               <Link href="/profile/edit">
                 <Button className="btn-primary">Edit Profile</Button>
               </Link>
-              <Link href="/profile/edit">
-                <Button className="btn-primary">Share Profile</Button>
-              </Link>
+              <Button className="btn-primary">Share Profile</Button>
             </>
           )}
         </SignedIn>

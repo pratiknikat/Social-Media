@@ -1,40 +1,37 @@
-import Post from "@/database/post.model";
+"use server";
+import User from "@/database/user.model";
 import { connectToDatabase } from "../mongoose";
-import { AddPostParams } from "./shared.type";
+import Post from "@/database/post.model";
+import { revalidatePath } from "next/cache";
 
-export async function addPost(params: AddPostParams) {
+export async function addPost(params: any) {
   try {
     connectToDatabase();
     const { caption, imageUrl, user, path } = params;
-    // Create the question
-    const post = await Post.create({
+    const newPost = new Post({
       caption,
       imageUrl,
       user,
     });
-    // const tagDocuments = [];
-    // Create the tags or get them if they already exist
-    // for (const tag of tags) {
-    //   const existingTag = await Tag.findOneAndUpdate(
-    //     { name: { $regex: new RegExp(`^${tag}$`, "i") } },
-    //     { $setOnInsert: { name: tag }, $push: { questions: question._id } },
-    //     { upsert: true, new: true }
-    //   );
-    //   tagDocuments.push(existingTag._id);
-    // }
-    // await Question.findByIdAndUpdate(question._id, {
-    //   $push: { tags: { $each: tagDocuments } },
-    // });
-    // await Interaction.create({
-    //   user: author,
-    //   action: "ask_question",
-    //   question: question._id,
-    //   tags: tagDocuments,
-    // });
-    // await User.findByIdAndUpdate(author, { $inc: { reputation: 5 } });
-    // revalidatePath(path);
-    return post;
+
+    const savedPost = await newPost.save();
+    const userDoc = await User.findById(user);
+    userDoc.posts.push(savedPost._id);
+    await userDoc.save();
+    revalidatePath(path);
   } catch (error) {
     console.error(error);
+    throw error;
+  }
+}
+
+export async function getPosts() {
+  try {
+    connectToDatabase();
+    const posts = await Post.find().populate("user");
+    return posts;
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
 }

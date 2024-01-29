@@ -55,6 +55,21 @@ body {
       color: black;
     }
   }
+  .btn-primary1 {
+    /* font-size: "14px"; */
+    background-color: black;
+    /* min-height: "35px"; */
+    /* min-width: "180px"; */
+    /* padding-left: "14px"; */
+    /* padding-right: "40px"; */
+    /* padding-top: "4px"; */
+    /* padding-bottom: "4px"; */
+    color: white;
+    border-radius: 7px;
+    &:hover {
+      color: black;
+    }
+  }
   .btn-tertiary {
     background-color: #888;
   }
