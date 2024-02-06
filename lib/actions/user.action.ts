@@ -1,3 +1,4 @@
+"use server";
 import User from "@/database/user.model";
 import { connectToDatabase } from "../mongoose";
 import Notification from "@/database/notification.model";
@@ -21,33 +22,48 @@ export async function getAllUser(params: any) {
   } catch (error) {}
 }
 
-// Handle follo wer
-export async function followUser(userId: string, followerId: string) {
+export async function followUser({ user1Id, user2Id }: any) {
   try {
-    const userToFollow = await User.findById(userId);
-    const follower = await User.findById(followerId);
-
-    if (!userToFollow || !follower) {
+    const user1 = await User.findById(user1Id);
+    const user2 = await User.findById(user2Id);
+    if (!user1 || !user2) {
       throw new Error("User or follower not found");
     }
 
-    // Check if the follower is already following the user
-    if (!follower.following.includes(userId)) {
-      follower.following.push(userId);
-      await follower.save();
-    }
+    if (!user1.followers?.includes(user2._id)) {
+      user1.followers?.push(user2._id);
+      await user1.save();
 
-    if (!userToFollow.followers.includes(followerId)) {
-      userToFollow.followers.push(followerId);
-      await userToFollow.save();
+      if (!user2.following?.includes(user1._id)) {
+        user2.following?.push(user1._id);
+        await user2.save();
+      }
 
       const notification = new Notification({
-        message: `${follower.username} started following you.`,
-        user1: followerId,
-        user2: userId,
+        message: `${user2.username} started following you.`,
+        user1: user2._id,
+        user2: user1._id,
       });
       await notification.save();
+      // push to user1 notifications
+      user2.notification?.push(notification._id);
+      await user2.save();
+      // console.log(user2);
     }
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function getNotifications({ mongoUserId }: any) {
+  try {
+    const user = await Notification.find({ user2: mongoUserId }).populate(
+      "user1"
+    );
+    // console.log(user);
+
+    return user || [];
   } catch (error) {
     console.error(error);
     throw error;

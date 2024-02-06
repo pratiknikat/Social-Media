@@ -29,7 +29,7 @@ export const list: story[] = [
 
 const Story = () => {
   return (
-    <ScrollArea className="w-[300px]">
+    <ScrollArea className="w-[340px]">
       <div className="flex w-max space-x-4 p-4 ">
         {list.map((story) => (
           <div className="overflow-hidden flex flex-col items-center align-middle ">

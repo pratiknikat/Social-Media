@@ -5,9 +5,7 @@ const Posts = async ({ posts }: any) => {
   return (
     <div>
       {posts.map((post: any, index: number) => {
-        // return <ShowPost key={index} post={post} />;÷\
-
-        return <h1>{post.user.name}</h1>;
+        return <ShowPost key={index} post={post} />;
       })}
     </div>
   );

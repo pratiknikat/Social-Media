@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import MobileNav from "./MobileNav";
-
+import Notificationss from "@/app/(root)/notification/page";
 import {
   Popover,
   PopoverContent,
@@ -46,19 +46,14 @@ const Navbar = () => {
           </SignedIn>
         </div>
         <div className="lg:hidden">
-          <Popover>
-            <PopoverTrigger>
-              <Image
-                src="assets/icons/love.svg"
-                alt="love"
-                width={30}
-                height={30}
-              />
-            </PopoverTrigger>
-            <PopoverContent className="bg-white">
-              Place content for the popover here.
-            </PopoverContent>
-          </Popover>
+          <Link href="/notification">
+            <Image
+              src="assets/icons/love.svg"
+              alt="love"
+              width={30}
+              height={30}
+            />
+          </Link>
         </div>
         <div className="lg:hidden">
           <Image

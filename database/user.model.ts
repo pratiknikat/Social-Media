@@ -35,7 +35,7 @@ const UserSchema = new Schema({
   saved: [{ type: Schema.Types.ObjectId, ref: "Post" }],
   followers: [{ type: Schema.Types.ObjectId, ref: "User" }],
   following: [{ type: Schema.Types.ObjectId, ref: "User" }],
-  notification: [{ type: Schema.Types.ObjectId, ref: "User" }],
+  notification: [{ type: Schema.Types.ObjectId, ref: "Notification" }],
   joinedAt: { type: Date, default: Date.now },
 });
 
