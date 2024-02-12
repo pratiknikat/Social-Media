@@ -4,7 +4,6 @@ import { Button } from "./components/ui/button";
 import { followUser } from "./lib/actions/user.action";
 
 const Followbackbtn = ({ mongoUserId, user1 }: any) => {
-  //   console.log(mongoUserId);
   return (
     <div>
       <Button

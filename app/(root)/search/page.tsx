@@ -19,7 +19,6 @@ const page = async () => {
       </div>
       <div className="mt-6 w-[70%] max-sm:w-full sm:w-full">
         {result?.map((user) => {
-          console.log(user);
           return <UserCard user1={mongoUser} user2={user} />;
         })}
       </div>

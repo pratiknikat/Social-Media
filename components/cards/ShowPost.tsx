@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { Input } from "../ui/input";
 const ShowPost = ({ post }: any) => {
+  // const [isLiked, setIsLiked] = useState(false);
+  const isLiked = true;
+
+  // const handleLike = () => {
+  //   setIsLiked(!isLiked);
+  // };
   return (
     <>
       <div
@@ -34,10 +40,15 @@ const ShowPost = ({ post }: any) => {
         <div className="flex justify-between mt-2 px-2">
           <div className="flex gap-2">
             <Image
-              src="/assets/icons/love.svg"
+              src={
+                isLiked
+                  ? "/assets/icons/like_filled.svg"
+                  : "/assets/icons/love.svg"
+              }
               width={30}
               height={30}
               alt="like"
+              // onClick={handleLike}
             />
             <Image
               src="/assets/icons/comment.svg"

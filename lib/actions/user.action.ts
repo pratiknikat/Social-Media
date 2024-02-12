@@ -48,7 +48,6 @@ export async function followUser({ user1Id, user2Id }: any) {
       // push to user1 notifications
       user2.notification?.push(notification._id);
       await user2.save();
-      // console.log(user2);
     }
   } catch (error) {
     console.error(error);
@@ -61,7 +60,6 @@ export async function getNotifications({ mongoUserId }: any) {
     const user = await Notification.find({ user2: mongoUserId }).populate(
       "user1"
     );
-    // console.log(user);
 
     return user || [];
   } catch (error) {

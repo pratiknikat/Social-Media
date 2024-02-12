@@ -4,7 +4,6 @@ import { Button } from "../ui/button";
 import Followbackbtn from "@/functions";
 const NotificationCard = ({ notifications, mongoUserId1 }: any) => {
   const isAlreadyFollowed = notifications.user1.following;
-  // console.log(notifications);
   return (
     <div
       className="flex justify-between my-4 w-full items-center"

@@ -1,14 +1,15 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "../ui/button";
 import { auth, useUser } from "@clerk/nextjs";
 import { followUser, getUserById } from "@/lib/actions/user.action";
 
 const userCard = ({ user1, user2 }: any) => {
+  const [isFollwed, setIsFollowed] = useState(false);
   const handlefollow = async () => {
     try {
-      await followUser({ user1Id: user1._id, user2Id: user2._id });
+      await followUser({ user1Id: user2._id, user2Id: user1._id });
     } catch (error) {
       console.error(error);
     }

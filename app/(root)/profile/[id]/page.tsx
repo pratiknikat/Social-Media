@@ -16,7 +16,6 @@ const Page = async ({ params }: URLProps) => {
     redirect("/sign-in");
   }
   const mongoUser = await getUserById({ userId: params.id });
-  // console.log(mongoUser);
   const { name, username, bio, picture, followers, following, posts, stories } =
     mongoUser;
 
